@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:tns="http://sourceforge.net/bpmn/definitions/_1406126832928" 
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             expressionLanguage="http://www.w3.org/1999/XPath" 
+             id="_1406126832928" name="" targetNamespace="http://sourceforge.net/bpmn/definitions/_1406126832928" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://bpmn.sourceforge.net/schemas/BPMN20.xsd"> 
+  <process id="_1" isClosed="false" isExecutable="true" processType="None"> 
+    <startEvent id="_2" name="IRM_START_EVENT" >
+    </startEvent>
+    <endEvent id="_3" name="IRM_START_EVENT" >
+    </endEvent> 
+    <serviceTask id="_4" implementation="##WebService" name="discount_cashflow"> 
+      <documentation id="_5" textFormat="text/plain"><![CDATA[document=d1/dc2/discount__single__cashflow_8sas.html]]></documentation>
+      <documentation id="_6" textFormat="text/plain"><![CDATA[tooltip=tooltip/d1/dc2/discount_single_cashflow.tooltip]]></documentation>
+      <ioSpecification>
+       <dataInput id="_7" isCollection="false" name="staging.cashflows.sas7bdat"/>
+       <dataOutput id="_12" isCollection="false" name="mk_cf.cashflows.sas7bdat"/>
+        <inputSet>
+          <dataInputRefs>_7</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_12</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <property id="_17" itemSubjectRef="xsd:string" name="type=sas"/> 
+      <property id="_18" itemSubjectRef="xsd:string" name="source=analysis/discount_single_cashflow.sas"/> 
+      <dataInputAssociation id="_9"> <sourceRef>_8</sourceRef> <targetRef>_7</targetRef> </dataInputAssociation>
+      <dataOutputAssociation id="_14"> <sourceRef>_12</sourceRef> <targetRef>_13</targetRef> </dataOutputAssociation>
+    </serviceTask>
+    <dataObjectReference dataObjectRef="staging.cashflows.sas7bdat" id="_8">
+        <dataState name="%in_inst_discount"/>
+    </dataObjectReference>
+    <dataObjectReference dataObjectRef="mk_cf.cashflows.sas7bdat" id="_13">
+        <dataState name="%out_inst_discount"/>
+    </dataObjectReference>
+    <sequenceFlow id="_21" sourceRef="_2" targetRef="_4"/>
+    <serviceTask id="_24" implementation="##WebService" name="sum_cashflow"> 
+      <documentation id="_25" textFormat="text/plain"><![CDATA[document=d1/db3/sum__data_8sas.html]]></documentation>
+      <documentation id="_26" textFormat="text/plain"><![CDATA[tooltip=tooltip/d1/db3/sum_data.tooltip]]></documentation>
+      <ioSpecification>
+       <dataInput id="_27" isCollection="false" name="mk_cf.cashflows.sas7bdat"/>
+       <dataOutput id="_32" isCollection="false" name="mk_cf.summed_cashflows.sas7bdat"/>
+        <inputSet>
+          <dataInputRefs>_27</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_32</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <property id="_37" itemSubjectRef="xsd:string" name="type=sas"/> 
+      <property id="_38" itemSubjectRef="xsd:string" name="source=analysis/sum_data.sas"/> 
+      <dataInputAssociation id="_29"> <sourceRef>_28</sourceRef> <targetRef>_27</targetRef> </dataInputAssociation>
+      <dataOutputAssociation id="_34"> <sourceRef>_32</sourceRef> <targetRef>_33</targetRef> </dataOutputAssociation>
+    </serviceTask>
+    <dataObjectReference dataObjectRef="mk_cf.cashflows.sas7bdat" id="_28">
+        <dataState name="%in_inst"/>
+    </dataObjectReference>
+    <dataObjectReference dataObjectRef="mk_cf.summed_cashflows.sas7bdat" id="_33">
+        <dataState name="%out_inst"/>
+    </dataObjectReference>
+    <sequenceFlow id="_41" sourceRef="_4" targetRef="_24"/>
+    <sequenceFlow id="_44" sourceRef="_24" targetRef="_3"/>
+    <dataObject id="mk_cf.summed_cashflows.sas7bdat" isCollection="false" name="mk_cf.summed_cashflows.sas7bdat"/> 
+    <dataObject id="mk_cf.cashflows.sas7bdat" isCollection="false" name="mk_cf.cashflows.sas7bdat"/> 
+    <dataObject id="staging.cashflows.sas7bdat" isCollection="false" name="staging.cashflows.sas7bdat"/> 
+  </process>
+  <bpmndi:BPMNDiagram id="IRM_Diagram-Expand" name="Expanded Diagram">
+    <bpmndi:BPMNPlane bpmnElement="simple_calculation_flow">
+      <bpmndi:BPMNEdge bpmnElement="_9" id="_10">
+        <di:waypoint x="0" y="0"/> <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="_8" id="_11">
+         <dc:Bounds height="60" width="350" x="0" y="130"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_14" id="_15">
+        <di:waypoint x="0" y="0"/> <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="_13" id="_16">
+         <dc:Bounds height="60" width="350" x="210" y="310"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_4" id="_19">
+        <dc:Bounds height="100" width="280" x="0" y="190"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_21" id="_22">
+        <di:waypoint x="0" y="0"/>
+        <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_29" id="_30">
+        <di:waypoint x="0" y="0"/> <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="_28" id="_31">
+         <dc:Bounds height="60" width="350" x="700" y="130"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_34" id="_35">
+        <di:waypoint x="0" y="0"/> <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="_33" id="_36">
+         <dc:Bounds height="60" width="350" x="910" y="310"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_24" id="_39">
+        <dc:Bounds height="100" width="280" x="700" y="190"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_41" id="_42">
+        <di:waypoint x="0" y="0"/>
+        <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_44" id="_45">
+        <di:waypoint x="0" y="0"/>
+        <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmndi:BPMNDiagram id="IRM_Diagram-Collapse" name="Collapsed Diagram">
+    <bpmndi:BPMNPlane bpmnElement="simple_calculation_flow">
+      <bpmndi:BPMNShape bpmnElement="_4" id="_20">
+        <dc:Bounds height="100" width="280" x="0" y="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_21" id="_23">
+        <di:waypoint x="0" y="0"/>
+        <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="_24" id="_40">
+        <dc:Bounds height="100" width="280" x="400" y="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_41" id="_43">
+        <di:waypoint x="0" y="0"/>
+        <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_44" id="_46">
+        <di:waypoint x="0" y="0"/>
+        <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

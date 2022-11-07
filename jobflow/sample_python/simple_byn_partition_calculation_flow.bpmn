@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" 
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" 
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI" 
+             xmlns:tns="http://sourceforge.net/bpmn/definitions/_1406126832928" 
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             expressionLanguage="http://www.w3.org/1999/XPath" 
+             id="_1406126832928" name="" targetNamespace="http://sourceforge.net/bpmn/definitions/_1406126832928" 
+             typeLanguage="http://www.w3.org/2001/XMLSchema" 
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://bpmn.sourceforge.net/schemas/BPMN20.xsd"> 
+  <process id="_1" isClosed="false" isExecutable="true" processType="None"> 
+    <startEvent id="_2" name="IRM_START_EVENT" >
+    </startEvent>
+    <endEvent id="_3" name="IRM_START_EVENT" >
+    </endEvent> 
+    <serviceTask id="_4" implementation="##WebService" name="get_cardinality_cashflows_byn"> 
+      <documentation id="_5" textFormat="text/plain"><![CDATA[document=d5/d7d/irm__node__get__cardinality__byn_8sas.html]]></documentation>
+      <documentation id="_6" textFormat="text/plain"><![CDATA[tooltip=tooltip/d5/d7d/irm_node_get_cardinality_byn.tooltip]]></documentation>
+      <ioSpecification>
+       <dataInput id="_7" isCollection="false" name="staging.cashflows.sas7bdat"/>
+       <dataInput id="_12" isCollection="false" name="irm_cfg.byn_configuration.sas7bdat"/>
+       <dataOutput id="_17" isCollection="false" name="mk_card.card_cashflows_byn.sas7bdat"/>
+        <inputSet>
+          <dataInputRefs>_7</dataInputRefs>
+          <dataInputRefs>_12</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_17</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <property id="_22" itemSubjectRef="xsd:string" name="type=sas"/> 
+      <property id="_23" itemSubjectRef="xsd:string" name="source=irm_node_get_cardinality_byn.sas"/> 
+      <dataInputAssociation id="_9"> <sourceRef>_8</sourceRef> <targetRef>_7</targetRef> </dataInputAssociation>
+      <dataInputAssociation id="_14"> <sourceRef>_13</sourceRef> <targetRef>_12</targetRef> </dataInputAssociation>
+      <dataOutputAssociation id="_19"> <sourceRef>_17</sourceRef> <targetRef>_18</targetRef> </dataOutputAssociation>
+    </serviceTask>
+    <dataObjectReference dataObjectRef="staging.cashflows.sas7bdat" id="_8">
+        <dataState name="%in_ds_part_byn"/>
+    </dataObjectReference>
+    <dataObjectReference dataObjectRef="irm_cfg.byn_configuration.sas7bdat" id="_13">
+        <dataState name="%in_byn_conf"/>
+    </dataObjectReference>
+    <dataObjectReference dataObjectRef="mk_card.card_cashflows_byn.sas7bdat" id="_18">
+        <dataState name="%out_card_ds_byn"/>
+    </dataObjectReference>
+    <sequenceFlow id="_26" sourceRef="_2" targetRef="_4"/>
+    <serviceTask id="_29" implementation="##WebService" name="partition_cashflows_byn"> 
+      <documentation id="_30" textFormat="text/plain"><![CDATA[document=db/d70/irm__partition__byn_8py.html]]></documentation>
+      <documentation id="_31" textFormat="text/plain"><![CDATA[tooltip=tooltip/db/d70/irm_partition_byn.tooltip]]></documentation>
+      <ioSpecification>
+       <dataInput id="_32" isCollection="false" name="staging.cashflows.sas7bdat"/>
+       <dataInput id="_37" isCollection="false" name="mk_card.card_cashflows_byn.sas7bdat"/>
+       <dataOutput id="_42" isCollection="false" name="p_stage.cashflows.sas7bdat"/>
+        <inputSet>
+          <dataInputRefs>_32</dataInputRefs>
+          <dataInputRefs>_37</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_42</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <property id="_47" itemSubjectRef="xsd:string" name="type=python"/> 
+      <property id="_48" itemSubjectRef="xsd:string" name="source=irm_partition_byn.py"/> 
+      <property id="_49" itemSubjectRef="xsd:string" name="cardinality=mk_card.card_cashflows_byn.sas7bdat"/> 
+      <dataInputAssociation id="_34"> <sourceRef>_33</sourceRef> <targetRef>_32</targetRef> </dataInputAssociation>
+      <dataInputAssociation id="_39"> <sourceRef>_38</sourceRef> <targetRef>_37</targetRef> </dataInputAssociation>
+      <dataOutputAssociation id="_44"> <sourceRef>_42</sourceRef> <targetRef>_43</targetRef> </dataOutputAssociation>
+    </serviceTask>
+    <dataObjectReference dataObjectRef="staging.cashflows.sas7bdat" id="_33">
+        <dataState name="%ds_to_part"/>
+    </dataObjectReference>
+    <dataObjectReference dataObjectRef="mk_card.card_cashflows_byn.sas7bdat" id="_38">
+        <dataState name="%cardinality_ds"/>
+    </dataObjectReference>
+    <dataObjectReference dataObjectRef="p_stage.cashflows.sas7bdat" id="_43">
+        <dataState name="%part_ds,partition"/>
+    </dataObjectReference>
+    <sequenceFlow id="_52" sourceRef="_4" targetRef="_29"/>
+    <serviceTask id="_55" implementation="##WebService" name="discount_cashflow"> 
+      <documentation id="_56" textFormat="text/plain"><![CDATA[document=d1/dc2/discount__single__cashflow_8sas.html]]></documentation>
+      <documentation id="_57" textFormat="text/plain"><![CDATA[tooltip=tooltip/d1/dc2/discount_single_cashflow.tooltip]]></documentation>
+      <ioSpecification>
+       <dataInput id="_58" isCollection="false" name="p_stage.cashflows.sas7bdat"/>
+       <dataOutput id="_63" isCollection="false" name="p_mk_cf.cashflows.sas7bdat"/>
+        <inputSet>
+          <dataInputRefs>_58</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_63</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <property id="_68" itemSubjectRef="xsd:string" name="type=sas"/> 
+      <property id="_69" itemSubjectRef="xsd:string" name="source=analysis/discount_single_cashflow.sas"/> 
+      <dataInputAssociation id="_60"> <sourceRef>_59</sourceRef> <targetRef>_58</targetRef> </dataInputAssociation>
+      <dataOutputAssociation id="_65"> <sourceRef>_63</sourceRef> <targetRef>_64</targetRef> </dataOutputAssociation>
+    </serviceTask>
+    <dataObjectReference dataObjectRef="p_stage.cashflows.sas7bdat" id="_59">
+        <dataState name="%in_inst_discount,partition"/>
+    </dataObjectReference>
+    <dataObjectReference dataObjectRef="p_mk_cf.cashflows.sas7bdat" id="_64">
+        <dataState name="%out_inst_discount,partition"/>
+    </dataObjectReference>
+    <sequenceFlow id="_72" sourceRef="_29" targetRef="_55"/>
+    <serviceTask id="_75" implementation="##WebService" name="recombine_cashflow_byn"> 
+      <documentation id="_76" textFormat="text/plain"><![CDATA[document=d1/d62/irm__recombine__byn_8py.html]]></documentation>
+      <documentation id="_77" textFormat="text/plain"><![CDATA[tooltip=tooltip/d1/d62/irm_recombine_byn.tooltip]]></documentation>
+      <ioSpecification>
+       <dataInput id="_78" isCollection="false" name="p_mk_cf.cashflows.sas7bdat"/>
+       <dataOutput id="_83" isCollection="false" name="r_mk_cf.cashflows_result.sas7bdat"/>
+        <inputSet>
+          <dataInputRefs>_78</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_83</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <property id="_88" itemSubjectRef="xsd:string" name="type=python"/> 
+      <property id="_89" itemSubjectRef="xsd:string" name="source=irm_recombine_byn.py"/> 
+      <dataInputAssociation id="_80"> <sourceRef>_79</sourceRef> <targetRef>_78</targetRef> </dataInputAssociation>
+      <dataOutputAssociation id="_85"> <sourceRef>_83</sourceRef> <targetRef>_84</targetRef> </dataOutputAssociation>
+    </serviceTask>
+    <dataObjectReference dataObjectRef="p_mk_cf.cashflows.sas7bdat" id="_79">
+        <dataState name="%tablein,partition"/>
+    </dataObjectReference>
+    <dataObjectReference dataObjectRef="r_mk_cf.cashflows_result.sas7bdat" id="_84">
+        <dataState name="%tableout"/>
+    </dataObjectReference>
+    <sequenceFlow id="_92" sourceRef="_55" targetRef="_75"/>
+    <sequenceFlow id="_95" sourceRef="_75" targetRef="_3"/>
+    <dataObject id="p_stage.cashflows.sas7bdat" isCollection="false" name="p_stage.cashflows.sas7bdat"/> 
+    <dataObject id="irm_cfg.byn_configuration.sas7bdat" isCollection="false" name="irm_cfg.byn_configuration.sas7bdat"/> 
+    <dataObject id="mk_card.card_cashflows_byn.sas7bdat" isCollection="false" name="mk_card.card_cashflows_byn.sas7bdat"/> 
+    <dataObject id="r_mk_cf.cashflows_result.sas7bdat" isCollection="false" name="r_mk_cf.cashflows_result.sas7bdat"/> 
+    <dataObject id="staging.cashflows.sas7bdat" isCollection="false" name="staging.cashflows.sas7bdat"/> 
+    <dataObject id="p_mk_cf.cashflows.sas7bdat" isCollection="false" name="p_mk_cf.cashflows.sas7bdat"/> 
+  </process>
+  <bpmndi:BPMNDiagram id="IRM_Diagram-Expand" name="Expanded Diagram">
+    <bpmndi:BPMNPlane bpmnElement="simple_byn_partition_calculation_flow">
+      <bpmndi:BPMNEdge bpmnElement="_9" id="_10">
+        <di:waypoint x="0" y="0"/> <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="_8" id="_11">
+         <dc:Bounds height="60" width="350" x="0" y="200"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_14" id="_15">
+        <di:waypoint x="0" y="0"/> <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="_13" id="_16">
+         <dc:Bounds height="60" width="350" x="0" y="130"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_19" id="_20">
+        <di:waypoint x="0" y="0"/> <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="_18" id="_21">
+         <dc:Bounds height="60" width="350" x="210" y="380"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_4" id="_24">
+        <dc:Bounds height="100" width="280" x="0" y="260"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_26" id="_27">
+        <di:waypoint x="0" y="0"/>
+        <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_34" id="_35">
+        <di:waypoint x="0" y="0"/> <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="_33" id="_36">
+         <dc:Bounds height="60" width="350" x="700" y="200"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_39" id="_40">
+        <di:waypoint x="0" y="0"/> <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="_38" id="_41">
+         <dc:Bounds height="60" width="350" x="700" y="130"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_44" id="_45">
+        <di:waypoint x="0" y="0"/> <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="_43" id="_46">
+         <dc:Bounds height="60" width="350" x="910" y="380"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_29" id="_50">
+        <dc:Bounds height="100" width="280" x="700" y="260"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_52" id="_53">
+        <di:waypoint x="0" y="0"/>
+        <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_60" id="_61">
+        <di:waypoint x="0" y="0"/> <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="_59" id="_62">
+         <dc:Bounds height="60" width="350" x="1400" y="200"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_65" id="_66">
+        <di:waypoint x="0" y="0"/> <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="_64" id="_67">
+         <dc:Bounds height="60" width="350" x="1610" y="380"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_55" id="_70">
+        <dc:Bounds height="100" width="280" x="1400" y="260"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_72" id="_73">
+        <di:waypoint x="0" y="0"/>
+        <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_80" id="_81">
+        <di:waypoint x="0" y="0"/> <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="_79" id="_82">
+         <dc:Bounds height="60" width="350" x="2100" y="200"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_85" id="_86">
+        <di:waypoint x="0" y="0"/> <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="_84" id="_87">
+         <dc:Bounds height="60" width="350" x="2310" y="380"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_75" id="_90">
+        <dc:Bounds height="100" width="280" x="2100" y="260"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_92" id="_93">
+        <di:waypoint x="0" y="0"/>
+        <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_95" id="_96">
+        <di:waypoint x="0" y="0"/>
+        <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmndi:BPMNDiagram id="IRM_Diagram-Collapse" name="Collapsed Diagram">
+    <bpmndi:BPMNPlane bpmnElement="simple_byn_partition_calculation_flow">
+      <bpmndi:BPMNShape bpmnElement="_4" id="_25">
+        <dc:Bounds height="100" width="280" x="0" y="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_26" id="_28">
+        <di:waypoint x="0" y="0"/>
+        <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="_29" id="_51">
+        <dc:Bounds height="100" width="280" x="400" y="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_52" id="_54">
+        <di:waypoint x="0" y="0"/>
+        <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="_55" id="_71">
+        <dc:Bounds height="100" width="280" x="800" y="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_72" id="_74">
+        <di:waypoint x="0" y="0"/>
+        <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape bpmnElement="_75" id="_91">
+        <dc:Bounds height="100" width="280" x="1200" y="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_92" id="_94">
+        <di:waypoint x="0" y="0"/>
+        <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_95" id="_97">
+        <di:waypoint x="0" y="0"/>
+        <di:waypoint x="0" y="0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
